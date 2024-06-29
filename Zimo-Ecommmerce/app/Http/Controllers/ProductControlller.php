@@ -47,8 +47,9 @@ class ProductControlller extends Controller
     {
         // find the product
         $product =Product::find($id);
+        $cart_count=Cart::all()->count();
 
-        return view('viewProduct',compact('product'));
+        return view('viewProduct',compact('product','cart_count'));
 
     }
 
@@ -82,27 +83,69 @@ class ProductControlller extends Controller
 
        $inCart=Cart::where('product_id',$product->id)->first();
 
-       if(!$inCart){
-           $cart=Cart::create([
-               'product_id'=>$product->id,
-               'quantity'=>1,
-               'total_price'=>$product->Price,
-           ]);
-       }
-       else{
+       if($inCart)
+       {
            $inCart->quantity += 1;
            $inCart->total_price +=$product->Price;
 
            $inCart->save();
+
+           return response()->json(['success'=> true]);
+       }
+      elseif (!$inCart)
+       {
+           Cart::create([
+               'product_id'=>$product->id,
+               'quantity'=>1,
+               'total_price'=>$product->Price,
+           ]);
+
+           return response()->json(['success'=>true]);
+       }else{
+           return response()->json(['success'=>false]);
        }
 
-       return redirect()->back()->with('success','Product Added to cart Successfully');
+
+
 
     }
 
     public function cartList()
     {
-        
+        $cartItem=Cart::with('product')->get();
+        $cart_count=Cart::all()->count();
+
+//        dd($cartItem);
+
+
+        return view('cartList',compact('cartItem','cart_count'));
+
+    }
+
+    public function incrementQuantity($id){
+
+        $cartItem=Cart::with('product')->find($id);
+        $cartItem->quantity +=1;
+        $cartItem->total_price +=$cartItem->product->Price;
+        $cartItem->save();
+
+        return redirect()->route('cart.list');
+    }
+
+    public  function decrementQuantity($id)
+    {
+        $cartItem=Cart::with('product')->find($id);
+
+        if($cartItem->quantity > 1){
+            $cartItem->quantity -= 1;
+            $cartItem->total_price= $cartItem->quantity *  $cartItem->product->Price;
+            $cartItem->save();
+
+        }else{
+            $cartItem->delete();
+        }
+
+        return redirect()->route('cart.list');
 
     }
 }

@@ -1,12 +1,7 @@
+@extends('layouts.default')
 
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ $product->name }} - Product Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@section('title','View Product')
+@section('content')
 <div class="container mt-5">
     <div class="card">
         @if ($product->imagUrl)
@@ -19,19 +14,44 @@
             </div>
             <p class="card-text">{{ $product->description }}</p>
             <div class="d-flex">
-                <form action="{{route('products.addToCart', $product->id)}}" method="POST" class="me-2">
-                    @csrf
-                    <button type="submit" class="btn btn-success">Add to Cart</button>
-                </form>
-                <a href="{{ url('/') }}" class="btn btn-secondary">Back</a>
+                <button type="button" class="btn btn-success w-auto add-to-cart-btn" data-product-id="{{ $product->id }}">Add to Cart</button>
+                <a href="{{ url('/') }}" class="btn btn-secondary mx-4">Back</a>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.add-to-cart-btn').on('click', function() {
+            let productId = $(this).data('product-id');
+            if (confirm('Product added to cart successfully! Click OK to view your cart.')) {
+                $.ajax({
+                    url: '{{ url('product/addToCart') }}/' + productId,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.href = '{{ url('product/cartItems') }}';
+                        } else {
+                            alert('Failed to add product to cart.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+@endsection
 
 {{--{{ route('cart.add', $product->id) }}--}}
 
