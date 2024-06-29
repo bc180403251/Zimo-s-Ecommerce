@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,11 @@ class ProductControlller extends Controller
         // get the  products
 
         $products=Product::all();
+        $cart_count=Cart::all()->count();
 
-        return view('welcome', compact('products'));
+//        dd($cart_count);
+
+        return view('welcome', compact('products', 'cart_count'));
 
     }
 
@@ -70,5 +74,35 @@ class ProductControlller extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function addToCart($id)
+    {
+        $product=Product::find($id);
+
+       $inCart=Cart::where('product_id',$product->id)->first();
+
+       if(!$inCart){
+           $cart=Cart::create([
+               'product_id'=>$product->id,
+               'quantity'=>1,
+               'total_price'=>$product->Price,
+           ]);
+       }
+       else{
+           $inCart->quantity += 1;
+           $inCart->total_price +=$product->Price;
+
+           $inCart->save();
+       }
+
+       return redirect()->back()->with('success','Product Added to cart Successfully');
+
+    }
+
+    public function cartList()
+    {
+        
+
     }
 }

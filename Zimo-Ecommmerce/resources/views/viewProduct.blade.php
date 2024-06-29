@@ -19,7 +19,7 @@
             </div>
             <p class="card-text">{{ $product->description }}</p>
             <div class="d-flex">
-                <form action="" method="POST" class="me-2">
+                <form action="{{route('products.addToCart', $product->id)}}" method="POST" class="me-2">
                     @csrf
                     <button type="submit" class="btn btn-success">Add to Cart</button>
                 </form>

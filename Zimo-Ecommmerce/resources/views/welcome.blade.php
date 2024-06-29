@@ -6,7 +6,17 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4">Product List</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+{{--        {{ route('cart.index') }}--}}
+        <h1>Product List</h1>
+        <a href="" class="btn btn-outline-primary position-relative">
+            Cart
+            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                {{ $cart_count }}
+            </span>
+
+        </a>
+    </div>
     <div class="row">
         @foreach ($products as $product)
             <div class="col-md-4 mb-4">
@@ -21,7 +31,7 @@
                         </div>
                         <div class="mt-auto">
                             <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary w-100 mb-2">View Product</a>
-                            <form action="" method="POST">
+                            <form action="{{ route('products.addToCart', $product->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-success w-100">Add to Cart</button>
                             </form>
