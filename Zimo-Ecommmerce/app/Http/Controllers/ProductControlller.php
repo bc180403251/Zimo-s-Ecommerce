@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProductControlller extends Controller
 {
@@ -90,6 +91,7 @@ class ProductControlller extends Controller
 
            $inCart->save();
 
+//           session::flash('success','Product added to Cart');
            return response()->json(['success'=> true]);
        }
       elseif (!$inCart)
@@ -100,8 +102,10 @@ class ProductControlller extends Controller
                'total_price'=>$product->Price,
            ]);
 
+//           session::flash('success','Product added to Cart');
            return response()->json(['success'=>true]);
        }else{
+//           session::flash('success','Product failed to  added to Cart');
            return response()->json(['success'=>false]);
        }
 
