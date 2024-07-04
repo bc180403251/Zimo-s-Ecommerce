@@ -13,7 +13,10 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // create parent category
         Category::factory(10)->create();
+
+//        create some children categories
+        Category::factory(20)->create();
     }
 }

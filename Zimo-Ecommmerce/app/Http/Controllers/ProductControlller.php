@@ -25,6 +25,10 @@ class ProductControlller extends Controller
 
     }
 
+//    list of the products
+
+
+
     /**
      * Show the form for creating a new resource.
      */
