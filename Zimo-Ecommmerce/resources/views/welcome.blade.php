@@ -1,4 +1,4 @@
-@extends('layouts.default')
+'@extends('layouts.default')
 
 @section('title', 'Product')
 
@@ -60,7 +60,7 @@
                                                         <p class="card-text fw-bold">$${product.Price}</p>
                                                     </div>
                                                     <div class="mt-auto">
-                                                        <a href="/products/${product.id}" class="btn btn-primary w-100 mb-2">View Product</a>
+                                                        <a href="{{ url('product/view') }}/${product.id}" class="btn btn-primary w-100 mb-2">View Product</a>
                                                         <button type="button" class="btn btn-success w-100 add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                                                     </div>
                                                 </div>
@@ -82,7 +82,7 @@
                                                     <p class="card-text fw-bold">$${product.Price}</p>
                                                 </div>
                                                 <div class="mt-auto">
-                                                    <a href="/products/${product.id}" class="btn btn-primary w-100 mb-2">View Product</a>
+                                                    <a href="{{ url('product/view') }}/${product.id}" class="btn btn-primary w-100 mb-2">View Product</a>
                                                     <button type="button" class="btn btn-success w-100 add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                                                 </div>
                                             </div>
@@ -182,7 +182,8 @@
                 }
                 loadProducts(selectedCategoryName);
             });
-     
+
         });
     </script>
 @endsection
+'

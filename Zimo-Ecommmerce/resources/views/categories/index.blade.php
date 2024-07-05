@@ -9,7 +9,7 @@
                     <h1>{{ __('Categories') }}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6 text-right">
-                    <a href="" class="btn btn-outline-secondary">{{ __('Add Category') }}</a>
+                    <a href="{{route('categories.create')}}" class="btn btn-outline-secondary">{{ __('Add Category') }}</a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -41,8 +41,8 @@
                                         <td>{{$category->parent ? $category->parent->name : 'None'  }}</td>
                                         <td>
                                             <div class="d-flex justify-content-around">
-                                                <a href="" class="btn btn-info btn-sm mx-1">{{ __('View') }}</a>
-                                                <a href="" class="btn btn-warning btn-sm mx-1">{{ __('Update') }}</a>
+                                                <a href="{{route('categories.view', $category->id)}}" class="btn btn-info btn-sm mx-1">{{ __('View') }}</a>
+                                                <a href="{{route('categories.edit', $category->id)}}" class="btn btn-warning btn-sm mx-1">{{ __('Update') }}</a>
                                                 <button type="button" class="btn btn-danger btn-sm mx-1 delete-btn" data-category-id="{{ $category->id }}">{{ __('Delete') }}</button>
                                             </div>
                                         </td>
@@ -68,7 +68,8 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.delete-btn').on('click', function () {
+
+              $('.delete-btn').on('click', function () {
                 if (confirm('Are you sure you want to delete this category?')) {
                     let categoryId = $(this).data('category-id');
 

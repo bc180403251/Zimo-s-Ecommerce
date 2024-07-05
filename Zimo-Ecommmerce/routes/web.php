@@ -36,4 +36,9 @@ Route::middleware('auth')->group(function () {
 //    Category cruds
     Route::get('categories',[CategoryController::class, 'index'])->name('categories.index');
     Route::delete('categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
+    Route::get('categories/create',[CategoryController::class, 'create'])->name('categories.create');
+    Route::post('categories/create',[CategoryController::class, 'store'])->name('categories.store');
+    Route::get('categories/show/{id}',[CategoryController::class, 'show'])->name('categories.view');
+    Route::get('categories/update/{id}',[CategoryController::class, 'edit'])->name('categories.edit');
+    Route::post('categories/update/{id}', [CategoryController::class ,'Update'])->name('categories.update');
 });
