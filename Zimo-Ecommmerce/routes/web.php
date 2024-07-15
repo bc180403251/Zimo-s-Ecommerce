@@ -7,12 +7,16 @@ use \App\Http\Controllers\Admin\CategoryController;
 
 Route::get('/', [ProductControlller::class, 'index']);
 
+Route::get('view-all',[ProductControlller::class ,'allProducts']);
+
 Route::get('product/view/{id}',[ProductControlller::class, 'show'])->name('products.show');
 Route::post('product/addToCart/{id}',[ProductControlller::class, 'addToCart'])->name('products.addToCart');
 Route::get('product/cartItems',[ProductControlller::class, 'cartList'])->name('cart.list');
 
 Route::post('product/cartItem/increment/{id}',[ProductControlller::class ,'incrementQuantity'])->name('increment');
 Route::post('product/cartItem/decrement/{id}',[ProductControlller::class, 'decrementQuantity'])->name('decrement');
+Route::get('products/getSearch',[ProductControlller::class, 'search'])->name('search');
+Route::get('products/search',[ProductControlller::class, 'ajaxSearch'])->name('ajax.search');
 
 Auth::routes();
 

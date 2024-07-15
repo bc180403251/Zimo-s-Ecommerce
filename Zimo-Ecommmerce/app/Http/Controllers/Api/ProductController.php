@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,8 +32,10 @@ class ProductController extends Controller
 
         $cart_count=Cart::all()->count();
 
+//        $comments=Comment::with('user')->get();
+
 //        dd($product);
 
-        return response()->json(['products'=>$product, 'cart_count'=>$cart_count, 'categories'=>$categories]);
+        return response()->json(['products'=>$product, 'cart_count'=>$cart_count , 'categories'=>$categories]);
     }
 }

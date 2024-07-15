@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -15,7 +16,26 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+    @if(Session::has('message'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ Session::get('message') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <script>
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 3000);
+        </script>
+    @endif
+{{--    progress Bar --}}
+    <div id="progress-container" class="progress" style="display: none;">
+        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
+             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+            0%
+        </div>
+    </div>
     <!-- Main content -->
     <div id="message-container"></div>
     <div class="content">
@@ -66,45 +86,65 @@
     </div>
     <!-- /.content -->
 
+
+
     <!-- AJAX Script for Delete -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.delete-btn').on('click', function () {
                 if (confirm('Are you sure you want to delete this product?')) {
                     let productId = $(this).data('product-id');
+                    let progressContainer = $('#progress-container');
+                    let progressBar = $('#progress-bar');
 
-                    $.ajax({
-                        url: '/products/delete/' + productId,
-                        method: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                // Display success message
-                                let messageContainer = $('#message-container');
-                                messageContainer.empty();
-                                let messageAlert = $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                                    'Product deleted successfully!' +
-                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                                    '<span aria-hidden="true">&times;</span></button> '+
-                                    '</div>');
-                                messageContainer.append(messageAlert);
+                    progressContainer.show();
+                    progressBar.css('width', '0%').attr('aria-valuenow', 0).text('0%');
 
-                                setTimeout(function (){
-                                    messageAlert.alert('close')
-                                }, 5000)
+                    let interval = setInterval(function() {
+                        let progress = parseInt(progressBar.attr('aria-valuenow'));
+                        if (progress < 100) {
+                            progress += 10;
+                            progressBar.css('width', progress + '%').attr('aria-valuenow', progress).text(progress + '%');
+                        } else {
+                            clearInterval(interval);
+                            progressContainer.hide();
 
-                                // Remove the deleted product row from the table
-                                $('#product-' + productId).remove();
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                            alert('An error occurred. Please try again.');
+                            $.ajax({
+                                url: '/products/delete/' + productId,
+                                method: 'DELETE',
+                                data: {
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function (response) {
+                                    if (response.success) {
+                                        // Display success message
+                                        let messageContainer = $('#message-container');
+                                        messageContainer.empty();
+                                        let messageAlert = $('<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                                            'Product deleted successfully!' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                            '<span aria-hidden="true">&times;</span></button>' +
+                                            '</div>');
+                                        messageContainer.append(messageAlert);
+
+                                        setTimeout(function () {
+                                            messageAlert.alert('close');
+                                        }, 5000);
+
+                                        // Remove the deleted product row from the table
+                                        $('#product-' + productId).remove();
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error:', error);
+                                    alert('An error occurred. Please try again.');
+                                }
+                            });
                         }
-                    });
+                    }, 300); // Update progress every 100ms
                 }
             });
         });

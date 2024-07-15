@@ -22,8 +22,10 @@ class DatabaseSeeder extends Seeder
             'password'=> Hash::make('password')
         ]);
         $this->call([
+            UserSeeder::class,
             CategorySeeder::class,
-            ProductSeeder::class
+            ProductSeeder::class,
+            CommentSeeder::class
 
         ]);
     }

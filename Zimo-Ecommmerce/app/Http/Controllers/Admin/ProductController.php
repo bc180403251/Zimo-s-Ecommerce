@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 
 class ProductController extends Controller
@@ -35,7 +36,8 @@ class ProductController extends Controller
            'description'=> 'required|String' ,
            'Price'=> 'required|String',
             'imagUrl'=> 'required|url',
-            'category_id'=>'required|exists:categories,id'
+            'category_id'=>'required|exists:categories,id',
+            'otherimgs'=> 'required'
         ]);
 // find the category by its id
 
@@ -47,7 +49,11 @@ class ProductController extends Controller
         $product->imagUrl = $request->input('imagUrl');
         $product->Price = $request->input('Price');
         $product->category_id = $request->input('category_id');
+        $product->otherimgs= $request->input('otherimgs');
         $product->save();
+
+
+        Session::flash('message','Product Added Successfully!');
 
         return response()->json(['Product'=>$product, 'message'=>'Product Added Successfully!']);
 
@@ -103,6 +109,8 @@ class ProductController extends Controller
 
             // Save the updated product
             $product->save();
+
+            Session::flash('message','Product Updated Successfully!');
 
             return response()->json(['success' => true, 'message' => 'Product updated successfully!']);
         } catch (\Exception $e) {

@@ -68,6 +68,16 @@
                                     <textarea name="description" class="form-control" id="description" rows="4" required>{{ $product->description }}</textarea>
                                 </div>
 
+                                <!-- Progress Bar -->
+                                <div class="form-group">
+                                    <div id="progress-container" class="progress" style="display: none;">
+                                        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                            0%
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Submit Button -->
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary" id="update-product-btn">{{ __('Update Product') }}</button>
@@ -93,7 +103,7 @@
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBTm4SmqiK639teAdxi8lA4Bsv9PS9G3ok",
-            authDomain: "Yzimo-ecomerce.firebaseapp.com",
+            authDomain: "zimo-ecomerce.firebaseapp.com",
             projectId: "zimo-ecomerce",
             storageBucket: "zimo-ecomerce.appspot.com",
             messagingSenderId: "565335075487",
@@ -104,6 +114,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const storage = getStorage(app);
+
         $(document).ready(function() {
             $('#update-product-btn').on('click', function () {
                 // Gather form values
@@ -111,18 +122,33 @@
                 let price = $('#price').val();
                 let category = $('#category').val();
                 let description = $('#description').val();
-                let imagUrl='{{ $product->imagUrl }}';
+                let imagUrl = '{{ $product->imagUrl }}';
 
                 // Check if a new image file is selected
                 let file = $('#image')[0].files[0];
                 if (file) {
+                    // Show progress bar
+                    $('#progress-container').show();
+
                     // Upload image to Firebase Storage
                     const storageRef = ref(storage, 'images/' + file.name);
                     const uploadTask = uploadBytesResumable(storageRef, file);
 
-                    uploadTask.then((snapshot) => {
-                        // Get the download URL of the uploaded image
-                        getDownloadURL(snapshot.ref).then((downloadURL) => {
+                    // Update progress bar
+                    uploadTask.on('state_changed',
+                        function(snapshot) {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            $('#progress-bar').css('width', progress + '%').attr('aria-valuenow', progress).text(Math.round(progress) + '%');
+                        },
+                        function(error) {
+                            // Handle upload error
+                            console.error('Error uploading image:', error);
+                            alert('An error occurred while uploading the image. Please try again.');
+                        },
+                        async function() {
+                            // Upload completed successfully
+                            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
                             // Send AJAX request with all form data including the image URL
                             let data = {
                                 name: name,
@@ -145,14 +171,8 @@
                                     handleAjaxError(xhr);
                                 }
                             });
-                        }).catch((error) => {
-                            console.error('Error getting download URL:', error);
-                            alert('An error occurred. Please try again.');
-                        });
-                    }).catch((error) => {
-                        console.error('Error uploading image:', error);
-                        alert('An error occurred while uploading the image. Please try again.');
-                    });
+                        }
+                    );
                 } else {
                     // Send AJAX request without a new image
                     let data = {
@@ -160,7 +180,7 @@
                         Price: price,
                         category_id: category,
                         description: description,
-                        imagUrl:imagUrl,
+                        imagUrl: imagUrl,
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         _method: 'PATCH'
                     };

@@ -19,7 +19,7 @@ class ProductControlller extends Controller
         $products=Product::all();
         $cart_count=Cart::all()->count();
 
-//        dd($cart_count);
+//        dd($products);
 
         return view('welcome', compact('products', 'cart_count'));
 
@@ -155,5 +155,29 @@ class ProductControlller extends Controller
 
         return redirect()->route('cart.list');
 
+    }
+
+    public function search(Request $request)
+    {
+        $query=$request->input('query');
+
+        return view('search', compact('query'));
+    }
+    public function ajaxSearch(Request $request)
+    {
+        $query=$request->input('query');
+
+        $product=Product::where('name', 'LIKE',"%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->get();
+        return response()->json($product);
+
+    }
+
+    public function allProducts(){
+//        $products=Product::all();
+        $cart_count=Cart::all()->count();
+
+        return view('allProducts', compact('cart_count'));
     }
 }

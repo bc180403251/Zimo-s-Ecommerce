@@ -25,22 +25,25 @@ public function create(){
         return view('categories.create', compact('parentCategories'));
 }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'parent_id' => 'nullable|exists:categories,id'
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'parent_id' => 'nullable|exists:categories,id',
+            'imgUrl' => 'required|string'
+        ]);
 
-   $category=new Category();
-   $category->name= $request->input('name');
-   $category->description= $request->input('description');
-   $category->parent_id= $request->input('parent_id');
-   $category->save();
+        $category = new Category();
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->parent_id = $request->input('parent_id');
+        $category->imgUrl = $request->input('imgUrl'); // Assuming the Category model has an 'image_url' field
+        $category->save();
 
-    return response()->json(['category'=>$category, 'success'=> true]);
-}
+        return response()->json(['category' => $category, 'success' => true]);
+    }
+
 
 // view the Category
 
