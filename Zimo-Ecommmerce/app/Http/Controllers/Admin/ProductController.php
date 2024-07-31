@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ProductsImports;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
@@ -14,7 +17,7 @@ class ProductController extends Controller
     //get the list of the products
     public function productList()
     {
-        $products= Product::with('category')->paginate(10);
+        $products = Product::with('category')->orderBy('created_at', 'desc')->paginate(10);
 
         return view('products.index', compact('products'));
     }
@@ -118,5 +121,29 @@ class ProductController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred while updating the product.',$e->getMessage()], 401);
         }
     }
+
+//    function for exporting the data
+
+public function exportProduct()
+{
+    return Excel::download(new ProductExport, 'products.xlsx');
+
+}
+
+//function importing the data from file
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+//        dd($request->file('file'));
+
+//        dd(Excel::import(new ProductsImports, $request->file('file')));
+        Excel::import(new ProductsImports, $request->file('file'));
+
+        return back()->with('success', 'Products imported successfully.');
+    }
+
 
 }

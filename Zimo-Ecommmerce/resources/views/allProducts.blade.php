@@ -62,7 +62,7 @@
             z-index: 1; /* Ensure it's above the card content */
         }
 
-        .card-body:hover .add-to-cart-btn {
+        .card:hover .add-to-cart-btn {
             top: 150px;
         }
 

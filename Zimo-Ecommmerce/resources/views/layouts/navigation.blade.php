@@ -1,4 +1,6 @@
 <!-- Sidebar -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+
 <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -41,6 +43,14 @@
                     <i class="nav-icon fas fa-tags"></i>
                     <p>
                         {{ __('Products') }}
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('banners.index') }}" class="nav-link">
+                    <i class="nav-icon bi bi-box-seam-fill"></i>
+                    <p>
+                        {{ __('Banners') }}
                     </p>
                 </a>
             </li>

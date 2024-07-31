@@ -13,9 +13,9 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'imagUrl'
-
-
+        'imagUrl',
+        'otherimgs',
+        'category_id'
     ];
     public function carts()
     {

@@ -23,3 +23,7 @@ Route::get('users/reviews',[CommentController::class , 'comment']);
 
 //getting the all parent categories
 Route::get('categories/parents',[CategoryController::class, 'index']);
+
+
+//api for getting for active banner
+Route::get('banners/activeAll',[\App\Http\Controllers\admin\BannerController::class,'acitveBanners']);

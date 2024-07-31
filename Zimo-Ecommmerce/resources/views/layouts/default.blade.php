@@ -188,15 +188,7 @@
         .navbar a:hover {
             color: #ffffff;
         }
-        .banner-section {
-            height: 100vh;
-            background-image: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.7)), url('/shoes pics/banner.jpg');
-            background-position: center;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-        }
+
 
         footer {
             background-color: #1e3a8a; /* Dark Blue */

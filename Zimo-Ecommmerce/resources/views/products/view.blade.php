@@ -48,7 +48,7 @@
                             <div class="mb-3">
                                 <h2>{{ $product->name }}</h2>
                                 <p><strong>{{ __('Price') }}:</strong> ${{ $product->Price }}</p>
-                                <p><strong>{{ __('Category') }}:</strong> {{ $product->category->name }}</p>
+                                <p><strong>{{ __('Category') }}:</strong> {{@$product->category->name }}</p>
                             </div>
 
                             <!-- Product Description -->

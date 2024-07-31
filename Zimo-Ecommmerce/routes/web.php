@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ProductControlller;
 use \App\Http\Controllers\Admin\ProductController;
 use \App\Http\Controllers\Admin\CategoryController;
+ use    \App\Http\Controllers\admin\BannerController;
 
 Route::get('/', [ProductControlller::class, 'index']);
 
@@ -45,4 +46,23 @@ Route::middleware('auth')->group(function () {
     Route::get('categories/show/{id}',[CategoryController::class, 'show'])->name('categories.view');
     Route::get('categories/update/{id}',[CategoryController::class, 'edit'])->name('categories.edit');
     Route::post('categories/update/{id}', [CategoryController::class ,'Update'])->name('categories.update');
+
+
+//    Banners CRUDS
+    Route::get('banners',[BannerController::class ,'index'])->name('banners.index');
+    Route::get('banners/create',[BannerController::class, 'create'])->name('banners.create');
+    Route::post('banners/create', [BannerController::class, 'store'])->name('banners.store');
+    Route::get('banners/show/{id}',[BannerController::class, 'show'])->name('banners.show');
+    Route::get('banners/edit/{id}', [BannerController::class ,'edit'])->name('banners.edit');
+    Route::patch('banners/edit/{id}',[BannerController::class, 'update'])->name('banners.update');
+    Route::delete('banners/delete/{id}',[BannerController::class , 'destroy' ])->name('banners.delete');
+    Route::post('banner/status/{id}', [BannerController::class, 'bannerStatus'])->name('banners.status');
+
+//    File System Routes
+    Route::get('export-product',[ProductController::class, 'exportProduct'])->name('products.export');
+    Route::post('import-product',[ProductController::class, 'import'])->name('products.imports');
+    Route::get('categories-export',[CategoryController::class, 'exportCategories'])->name('categories.export');
+    Route::post('categories-import',[CategoryController::class ,'importCategory'])->name('categories.imports');
+    Route::get('banners-import',[BannerController::class, 'exportBanner'])->name('banners.export');
+    Route::post('banners-import', [BannerController::class, 'importBanners'])->name('banners.imports');
 });

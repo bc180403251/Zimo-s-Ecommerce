@@ -3,14 +3,20 @@
 @section('title', 'Home')
 
 @section('content')
-{{--     Banner Section--}}
-    <section class="banner-section">
-        <div class="content">
-            <h2>Casual Sports Shoes Here</h2>
-            <p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
-            <button href="{{url('view-all')}}">Order Now</button>
+<section class="banner-carousel-section">
+    <div id="banner-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" id="banner-container">
         </div>
-    </section>
+        <a class="carousel-control-prev" href="#banner-carousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#banner-carousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</section>
 {{--     Features Section--}}
     <section class="features-section">
         <div class="feature">
@@ -100,64 +106,52 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <style>
-        .card {
+        .available-products-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .product {
             margin-bottom: 20px;
             border-radius: 20px;
             overflow: hidden;
-            position: relative; /* Needed for absolute positioning */
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .carousel-item img {
-            height: 200px;
+            position: relative;
+            height: 300px;
             width: 100%;
             object-fit: cover;
         }
-        .card-body {
+        /**/
+
+         .product:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        /**/
+         #product .body {
             display: flex;
             flex-direction: column;
             flex-grow: 1; /* Allow the card body to expand */
         }
-        .card-link {
+         #link {
             text-decoration: none;
             color: inherit;
             position: relative; /* Needed for z-index stacking */
         }
-        .card-link:hover {
+        .body-link:hover {
             text-decoration: none;
             color: inherit;
         }
-        .review-card {
-            display: flex;
-            align-items: center;
-            margin-bottom: 70px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            height: 150px; /* Fixed height for review cards */
-            overflow: hidden; /* Ensure content does not overflow */
-        }
-        .review-card img {
-            border-radius: 50%;
-            height: 50px;
-            width: 50px;
-            object-fit: cover;
-            margin-right: 15px;
-        }
-        .review-card .review-content {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Ensure text does not overflow */
-        }
-        .review-card .review-content .name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
 
+        .product {
+            cursor: pointer;
+        }
+        /**/
+        .product h5, .product p {
+            pointer-events: none;
+        }
         /* Add to Cart Button Styling */
-        .add-to-cart-btn {
+        .product .add-to-cart-btn {
             position: absolute;
             top: -60px; /* Move above the card */
             left: 50%; /* Center horizontally */
@@ -174,48 +168,81 @@
             z-index: 1; /* Ensure it's above the card content */
         }
 
-        .card:hover .add-to-cart-btn {
+        .product:hover .add-to-cart-btn {
             top: 150px; /* Show button on hover */
+          }
+
+        .view-all-btn {
+            margin-bottom: 20px;
+            margin-left: auto;
+            border-radius: 50px;
+            background-color: #3b82f6; /* Blue */
+            color: white;
+            border: none;
         }
 
-        .banner-section .content {
-            max-width: 1200px;
-            margin: 0 auto;
+        /*review card button*/
+        .comment {
+            display: flex;
+            align-items: center;
+            margin-bottom: 70px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            height: 150px; /* Fixed height for review cards */
+            overflow: hidden; /* Ensure content does not overflow */
+        }
+        .comment img {
+            border-radius: 100%;
+            height: 5px;
+
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        .comment .review-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Ensure text does not overflow */
+        }
+        .comment .review-content .name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+
+        /*banner section*/
+
+        .banner-carousel-section {
+            height: 83vh; /* Adjust height as needed */
+            background: #333; /* Background color for visibility */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Ensure no content overflows */
+        }
+
+        #banner-carousel {
             width: 100%;
-            color: #ffffff;
+            height: 100%;
         }
-        .banner-section .content h2 {
-            font-size: 3rem;
-            max-width: 600px;
-            line-height: 70px;
+
+        .carousel-inner {
+            height: 100%; /* Ensure inner container fills the height */
         }
-        .banner-section .content p {
-            font-weight: 300;
-            max-width: 600px;
-            margin-top: 15px;
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%; /* Ensure image covers the carousel item */
+            object-fit: cover; /* Cover the area without distortion */
         }
-        .banner-section .content button {
-            padding: 12px 30px;
-            border: 3px solid #3b82f6; /* Blue */
-            font-size: 16px;
-            border-radius: 6px;
-            margin-top: 38px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: 0.2s ease;
-            background: #93c5fd; /* Light Blue */
-            color: black;
-        }
-        .banner-section .content button:hover {
-            color: white;
-            background: #3b82f6; /* Blue */
-            border-color: #3b82f6; /* Blue */
-        }
+
         .features-section {
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 40px 20px;
+            /*margin-top: 10px;*/
             background-color: #f3f4f6; /* Light Gray */
         }
         .feature {
@@ -235,21 +262,8 @@
         .feature p {
             color: #6b7280; /* Gray */
         }
-        .view-all-btn {
-            margin-bottom: 20px;
-            margin-left: auto;
-            border-radius: 50px;
-            background-color: #3b82f6; /* Blue */
-            color: white;
-            border: none;
-        }
-        .available-products-header {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+
+
         /* Categories Carousel Styling */
             .category-card {
                 position: relative;
@@ -291,53 +305,10 @@
             pointer-events: none;
         }
 
+
     </style>
     <script>
         $(document).ready(function() {
-            function loadCategories() {
-                $.ajax({
-                    url: '{{ url('api/categories/parents') }}',
-                    method: 'GET',
-                    success: function(response) {
-                        let categoriesContainer = $('#categories-container');
-                        categoriesContainer.empty();
-
-                        let categories = response.categories;
-                        let numCategories = categories.length;
-                        let numItems = Math.ceil(numCategories / 4); // 3 categories per carousel item
-
-                        for (let i = 0; i < numItems; i++) {
-                            let carouselItem = `
-                                <div class="carousel-item ${i === 0 ? 'active' : ''}">
-                                    <div class="row">
-                            `;
-
-                            for (let j = 0; j < 4; j++) {
-                                let category = categories[i * 4 + j];
-                                if (!category) break; // Break if there are no more categories
-
-                                carouselItem += `
-                                    <div class="col-md-3 mb-3 ">
-                                        <div class="category-card" style="background-image: url('${category.imgUrl}');">
-                                            <div class="category-name">${category.name}</div>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-
-                            carouselItem += `
-                                    </div>
-                                </div>
-                            `;
-                            categoriesContainer.append(carouselItem);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Failed to load categories:', error);
-                    }
-                });
-            }
-
             function loadProducts() {
                 $.ajax({
                     url: '{{ url('api/products/list') }}',
@@ -363,11 +334,12 @@
                                 if (!product) break; // Break if there are no more products
 
                                 carouselItem += `
-                                    <div class="col-md-3 mb-4">
-                                        <a href="{{ url('product/view') }}/${product.id}" class="card-link">
-                                            <div class="card h-100">
-                                                <img src="${product.imagUrl}" class="d-block w-100" alt="Product Image">
-                                                <div class="card-body d-flex flex-column">
+                                    <div class="first-card col-md-3 mb-4  ">
+                                            <a href="{{ url('product/view') }}/${product.id}" class="card-link" id="link">
+                                            <div class="card  product" >
+
+                                                <img src="${product.imagUrl}" class="product-img" alt="Product Image">
+                                                <div class="card-body d-flex flex-column  body">
                                                     <div class="d-flex justify-content-between">
                                                         <h5 class="card-title">${product.name}</h5>
                                                         <p class="card-text fw-bold color-darkorange">$${product.Price}</p>
@@ -427,9 +399,92 @@
                     }
                 });
             }
+            loadProducts();
+            // load the banners
+            function loadBanners() {
+                $.ajax({
+                    url: '{{ url('api/banners/activeAll') }}',
+                    method: 'GET',
+                    success: function(response) {
+                        let bannersContainer = $('#banner-container');
+                        bannersContainer.empty();
+
+                        let banners = response.banners;
+                        let numBanners = banners.length;
+                        let numItems = Math.ceil(numBanners / 1); // Assuming 1 banner per carousel item
+
+                        for (let i = 0; i < numItems; i++) {
+                            let carouselItem = `
+              < <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                        <img src="${banners[i].imgUrl}" class="d-block w-100" alt="Banner Image">
+                        <div class="carousel-caption">
+                            <h2>${banners[i].name}</h2>
+                            <p>${banners[i].details}</p>
+                            <a href="{{ url('view-all') }}" class="btn btn-primary">Order Now</a>
+                        </div>
+                    </div>
+            `;
+                            bannersContainer.append(carouselItem);
+                        }
+
+                        $('#banner-carousel').carousel();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to load banners:', error);
+                    }
+                });
+            }
+
+            loadBanners();
+            // function for loading the categories
+            function loadCategories() {
+                $.ajax({
+                    url: '{{ url('api/categories/parents') }}',
+                    method: 'GET',
+                    success: function(response) {
+                        let categoriesContainer = $('#categories-container');
+                        categoriesContainer.empty();
+
+                        let categories = response.categories;
+                        let numCategories = categories.length;
+                        let numItems = Math.ceil(numCategories / 4); // 3 categories per carousel item
+
+                        for (let i = 0; i < numItems; i++) {
+                            let carouselItem = `
+                                <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                                    <div class="row">
+                            `;
+
+                            for (let j = 0; j < 4; j++) {
+                                let category = categories[i * 4 + j];
+                                if (!category) break; // Break if there are no more categories
+
+                                carouselItem += `
+                                    <div class="col-md-3 mb-3 ">
+                                        <div class="category-card" style="background-image: url('${category.imgUrl}');">
+                                            <div class="category-name">${category.name}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+
+                            carouselItem += `
+                                    </div>
+                                </div>
+                            `;
+                            categoriesContainer.append(carouselItem);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to load categories:', error);
+                    }
+                });
+            }
+
+
 
             loadCategories();
-            loadProducts();
+
 
             // Load customer reviews
             function loadReviews() {
@@ -451,7 +506,7 @@
                                 <div class="carousel-item ${i === 0 ? 'active' : ''}">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="review-card">
+                                            <div class="review-card comment">
                                                 <img src="${review1.user.profile}" alt="Customer Image">
                                                 <div class="review-content">
                                                     <div class="name">${review1.user.name}</div>
@@ -460,7 +515,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="review-card">
+                                            <div class="review-card comment">
                                                 <img src="${review2.user.profile}" alt="Customer Image">
                                                 <div class="review-content">
                                                     <div class="name">${review2.user.name}</div>
@@ -485,6 +540,12 @@
             loadReviews();
         });
     </script>
+
+
 @endsection
+
+
+
+
 
 

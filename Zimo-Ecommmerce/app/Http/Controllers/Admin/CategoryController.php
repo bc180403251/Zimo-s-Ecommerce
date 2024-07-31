@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\CategoryExport;
 use App\Http\Controllers\Controller;
+use App\Imports\CategoryImport;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
     //function for getting the list of  with their child
     function index()
     {
-        $categories=Category::with('parent')->paginate(10);
+        $categories=Category::with('parent')->orderBy('created_at', 'desc')->paginate(10);
 //        dd($categories);
 
         return view('categories.index', compact('categories'));
@@ -89,5 +93,23 @@ public function Update(Request $request, $id)
         $category->delete($category);
 
         return response()->json(['success'=>true]);
+    }
+
+    public function exportCategories()
+    {
+        return Excel::download(new CategoryExport , 'Categories.xlsx');
+    }
+
+    public function importCategory(Request $request)
+    {
+        $request->validate([
+             'file' => 'required|mimes:xlsx,csv',
+        ]);
+//        dd($request->file('file'));
+
+        Excel::import(new CategoryImport, $request->file('file'));
+
+        Session::flash('message','Categories Imported');
+        return back();
     }
 }
